@@ -1,0 +1,4 @@
+# replace :80 with the domain
+:80 {
+    reverse_proxy graphql-engine:8080
+}
