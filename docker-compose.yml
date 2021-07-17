@@ -7,13 +7,13 @@ services:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
-  graphql-engine:
+  hasura:
     image: hasura/graphql-engine:v2.0.1
     ports:
       - '8080:8080'
     depends_on:
       - 'postgres'
-      - 'nestjs-api'
+      - 'api'
     restart: always
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
@@ -27,8 +27,8 @@ services:
     command:
       - graphql-engine
       - serve
-  nestjs-api:
-    image: nestjs-api:1.0.0
+  api:
+    image: api:1.0.0
     build:
       context: .
       target: production
@@ -46,7 +46,7 @@ services:
   caddy:
     image: caddy/caddy
     depends_on:
-      - 'graphql-engine'
+      - 'hasura'
     restart: always
     ports:
       - '80:80'
