@@ -3,22 +3,18 @@ services:
   postgres:
     image: postgres:12
     restart: always
-    networks:
-      - nestjs-network
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
-    image: hasura/graphql-engine:v2.0.2
+    image: hasura/graphql-engine:v2.0.1
     ports:
       - '8080:8080'
     depends_on:
       - 'postgres'
       - 'nestjs-api'
     restart: always
-    networks:
-      - nestjs-network
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       ## enable the console served by server
@@ -43,8 +39,6 @@ services:
       - '9229:9229'
     depends_on:
       - 'postgres'
-    networks:
-      - nestjs-network
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -63,5 +57,3 @@ services:
 volumes:
   db_data:
   caddy_certs:
-networks:
-  nestjs-network:
